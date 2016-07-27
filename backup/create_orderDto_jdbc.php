@@ -108,9 +108,9 @@ foreach ($crr as $i) {
     $a = 
 "
 
-    public int saveOmOrder(OmOrder omOrder) {
+    public int save" . $i . "($i $v) {
         AsyncSqlDto asyncSqlDto = new AsyncSqlDto();
-        asyncSqlDto = SqlBuildUtils.getInsertAsyncSql(omOrder);
+        asyncSqlDto = SqlBuildUtils.getInsertAsyncSql($v);
         return dynamicJdbcTemplate.update(asyncSqlDto.getSqlStr(), 
                 asyncSqlDto.getParams());
     }
