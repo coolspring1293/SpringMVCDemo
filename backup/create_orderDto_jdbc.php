@@ -21,13 +21,12 @@ foreach ($arr as $c){
     $d = lcfirst($c);
     $a = "    
 
-    public $c get" . $c . "(OrderDto orderDto, String dataSource) {
+    public $c get" . $c . "(OrderDto orderDto) {
 
         $c $d = new $c();
         $d.setId(orderDto.getOrderId());
         
         AsyncSqlDto asyncSqlDto = new AsyncSqlDto();
-        asyncSqlDto.setDataSource(dataSource);
         asyncSqlDto = SqlBuildUtils.getSelectSql($d);
         
         $d = jdbcTemplate.queryForObject(asyncSqlDto.getSqlStr(),
@@ -35,8 +34,10 @@ foreach ($arr as $c){
         return $d;
     } 
 ";
-    //echo $a;
+    echo $a;
 }
+
+
 
 
 
@@ -56,28 +57,46 @@ foreach ($brr as $c) {
     $d = lcfirst($c);
     $a = "
 
-    public List<$c> get" . $c . "s(OrderDto orderDto, String dataSource) {
+    public List<$c> get" . $c . "s(OrderDto orderDto) {
         List<$c> " . $d ."s = new ArrayList<>();
         $c $d = new $c();
-
         $d.setServiceOrderId(orderDto.getOmServiceOrder().getId());
-
         AsyncSqlDto asyncSqlDto = new AsyncSqlDto();
-        asyncSqlDto.setDataSource(dataSource);
         asyncSqlDto = SqlBuildUtils.getSelectSql($d);
-
         $d"."s = jdbcTemplate.query(asyncSqlDto.getSqlStr(), $c" . "RowMapper);
-        
         return $d" . "s;
     }
 
 ";
-    //echo $a;
+    echo $a;
 
 
 }
 
+echo '{';
+foreach ($arr as $c) {
+	$d = lcfirst($c);
+	echo "
+	orderDto.set" . $c ."(this.get" . $c . "());";
 
+}
+
+echo "
+
+
+";
+
+foreach ($brr as $c) {
+	echo "
+	orderDto.set" . $c . "s(this.get" . $c . "s());";
+}
+
+echo '
+
+}';
+
+
+///////////////////////////////////
 
 $crr = $arr + $brr;
 
